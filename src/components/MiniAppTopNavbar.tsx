@@ -75,26 +75,28 @@ function MiniAppTopNavbarComponent({
       <div className="flex-shrink-0">
         <Link href="/" className="flex items-center">
           {isDark ? (
-            <Image
-              src="/streme-text-white.svg"
-              width={80}
-              height={13}
-              alt="Streme"
-              onClick={onLogoClick}
-              className={onLogoClick ? "cursor-pointer" : ""}
-              priority
-            />
-          ) : (
-            <Image
-              src="/streme-text-black.svg"
-              width={80}
-              height={13}
-              alt="Streme"
-              onClick={onLogoClick}
-              className={onLogoClick ? "cursor-pointer" : ""}
-              priority
-            />
-          )}
+                <div className="relative w-auto h-4 md:h-5">
+                  <Image
+                    src="/streme-text-white.svg"
+                    alt="youBuidl"
+                    fill
+                    className={onLogoClick ? "object-contain cursor-pointer" : "object-contain"}
+                    onClick={onLogoClick}
+                    priority
+                  />
+                </div>
+              ) : (
+                <div className="relative w-auto h-4 md:h-5">
+                  <Image
+                    src="/streme-text-black.svg"
+                    alt="youBuidl"
+                    fill
+                    className={onLogoClick ? "object-contain cursor-pointer" : "object-contain"}
+                    onClick={onLogoClick}
+                    priority
+                  />
+                </div>
+              )}
         </Link>
       </div>
       <div className="flex items-center gap-2">

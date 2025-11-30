@@ -14,16 +14,26 @@ export async function GET() {
       "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600", // Cache for 5 minutes
     };
 
-    // Fetch trending tokens from the external API
-    const response = await fetch(
-      "https://api.streme.fun/api/tokens/trending?type=all",
-      {
-        headers: {
-          Accept: "application/json",
-          "User-Agent": "Streme/1.0",
-        },
-      }
-    );
+    // Fetch trending tokens from the external API with a short timeout
+    const controller = new AbortController();
+    const timeoutMs = 5000; // 5 seconds
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+    let response: Response;
+    try {
+      response = await fetch(
+        "https://api.streme.fun/api/tokens/trending?type=all",
+        {
+          headers: {
+            Accept: "application/json",
+            "User-Agent": "Streme/1.0",
+          },
+          signal: controller.signal,
+        }
+      );
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     if (!response.ok) {
       throw new Error(
@@ -67,6 +77,21 @@ export async function GET() {
 
     return Response.json(filteredData, { headers });
   } catch (error) {
+    // Handle request timeout separately so callers can react accordingly
+    // Node's fetch will throw an AbortError when the controller aborts.
+    // Different runtimes may surface different error shapes, so check common patterns.
+    const isTimeout =
+      (error && typeof error === "object" && (error as any).name === "AbortError") ||
+      (error && typeof error === "object" && (error as any).code === "ERR_ABORTED");
+
+    if (isTimeout) {
+      console.error("Trending fetch aborted (timeout)");
+      return Response.json(
+        { error: "Upstream request timed out" },
+        { status: 504 }
+      );
+    }
+
     console.error("Error fetching trending tokens:", error);
     return Response.json(
       {

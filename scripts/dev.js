@@ -226,12 +226,32 @@ After installation, run this command again.
     shell: false,
   });
 
+  // Log child process information for diagnostics
+  try {
+    console.log(`Spawned Next dev: pid=${nextDev.pid} nextBin=${nextBin}`);
+    console.log(`Dev env NEXT_PUBLIC_URL=${process.env.NEXT_PUBLIC_URL || frameUrl}`);
+  } catch (e) {
+    // best-effort logging
+  }
+
   // If the Next.js child process exits for any reason, run cleanup
   nextDev.on("exit", (code, signal) => {
     if (!isCleaningUp) {
-      console.log(`Next dev exited with code=${code} signal=${signal}`);
+      console.log(new Date().toISOString(), `Next dev exited with code=${code} signal=${signal}`);
+      console.log(`Child pid=${nextDev.pid} cwd=${process.cwd()}`);
+      console.log(`Environment sample: NEXT_PUBLIC_URL=${process.env.NEXT_PUBLIC_URL}, NEXTAUTH_URL=${process.env.NEXTAUTH_URL}`);
+      console.log("Suggestion: run 'node node_modules/.bin/next dev' directly to see raw Next logs.");
       cleanup();
     }
+  });
+
+  // Also capture spawn errors and closes for extra context
+  nextDev.on("error", (err) => {
+    console.error(new Date().toISOString(), "Next dev child process error:", err && err.message ? err.message : err);
+  });
+
+  nextDev.on("close", (code, signal) => {
+    console.log(new Date().toISOString(), `Next dev closed (code=${code} signal=${signal}) pid=${nextDev.pid}`);
   });
 
   // Handle cleanup

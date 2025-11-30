@@ -101,28 +101,30 @@ export function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-base-100 border-b border-base-300/20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+            {/* Logo (responsive) */}
             <Link href="/" className="flex-shrink-0">
               {isDark ? (
-                <Image
-                  src="/streme-text-white.svg"
-                  width={100}
-                  height={20}
-                  alt="Streme"
-                  onClick={handleLogoClick}
-                  className="cursor-pointer"
-                  priority
-                />
+                <div className="relative w-auto h-4 md:h-5">
+                  <Image
+                    src="/streme-text-white.svg"
+                    alt="youBuidl"
+                    fill
+                    className="object-contain cursor-pointer"
+                    onClick={handleLogoClick}
+                    priority
+                  />
+                </div>
               ) : (
-                <Image
-                  src="/streme-text-black.svg"
-                  width={130}
-                  height={20}
-                  alt="Streme"
-                  onClick={handleLogoClick}
-                  className="cursor-pointer"
-                  priority
-                />
+                <div className="relative w-auto h-5 md:h-6">
+                  <Image
+                    src="/streme-text-black.svg"
+                    alt="youBuidl"
+                    fill
+                    className="object-contain cursor-pointer"
+                    onClick={handleLogoClick}
+                    priority
+                  />
+                </div>
               )}
             </Link>
 

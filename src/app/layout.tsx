@@ -14,8 +14,8 @@ const poppinsRounded = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Streme Fun",
-  description: "Streme Fun",
+  title: "youBuidl",
+  description: "Explore, trade and get rewards trading Public Goods",
 };
 
 export default function RootLayout({
@@ -28,6 +28,18 @@ export default function RootLayout({
       <head>
         {/* Performance hint for Farcaster Quick Auth server, per docs */}
         <link rel="preconnect" href="https://auth.farcaster.xyz" />
+        {/* App manifest and social/meta tags for the youBuidl brand */}
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="description" content="Explore, trade and get rewards trading Public Goods" />
+        <meta property="og:title" content="youBuidl" />
+        <meta property="og:description" content="Explore, trade and get rewards trading Public Goods" />
+        <meta property="og:image" content="/android-chrome-512x512.png" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="youBuidl" />
+        <meta name="twitter:description" content="Explore, trade and get rewards trading Public Goods" />
+        <meta name="twitter:image" content="/android-chrome-512x512.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
