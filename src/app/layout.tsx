@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import ClientLayout from "./ClientLayout";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { PostHogProvider } from "../components/providers/PostHogProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+
+const poppinsRounded = localFont({
+  src: "../../public/fonts/PoppinsRounded-Rounded_1760960791858.ttf",
+  variable: "--font-poppins-rounded",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -60,9 +58,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased pb-4`}
-      >
+      <body className={`${poppinsRounded.variable} antialiased pb-4`}>
         <PostHogProvider>
           <ClientLayout>{children}</ClientLayout>
         </PostHogProvider>

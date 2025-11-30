@@ -3,6 +3,16 @@
   themes: light --default, dark --prefersdark;
 }
 
+/* Use local Poppins Rounded font (provided at project root) as primary */
+:root {
+  /* `next/font` will populate `--font-poppins-rounded` when the font is loaded */
+  --font-fallback-stack: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+body {
+  font-family: var(--font-poppins-rounded), var(--font-fallback-stack);
+}
+
 /* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;

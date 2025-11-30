@@ -217,11 +217,21 @@ After installation, run this command again.
     path.join(projectRoot, "node_modules", ".bin", "next")
   );
 
-  nextDev = spawn(nextBin, ["dev"], {
+  // Spawn Next using the Node executable to avoid wrapper scripts detaching
+  // and ensure the child process remains attached to this script.
+  nextDev = spawn("node", [nextBin, "dev"], {
     stdio: "inherit",
     env: { ...process.env, NEXT_PUBLIC_URL: frameUrl, NEXTAUTH_URL: frameUrl },
     cwd: projectRoot,
-    shell: process.platform === "win32", // Add shell option for Windows
+    shell: false,
+  });
+
+  // If the Next.js child process exits for any reason, run cleanup
+  nextDev.on("exit", (code, signal) => {
+    if (!isCleaningUp) {
+      console.log(`Next dev exited with code=${code} signal=${signal}`);
+      cleanup();
+    }
   });
 
   // Handle cleanup
