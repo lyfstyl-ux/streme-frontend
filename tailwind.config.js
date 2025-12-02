@@ -8,6 +8,37 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-poppins-rounded)", ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+      },
       animation: {
         glow: "glow 4s linear infinite",
         shimmer: "shimmer 2s infinite linear",
@@ -25,23 +56,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: [
-      {
-        youbuidl: {
-          primary: "#CDEB63",
-          "primary-focus": "#b9e34f",
-          "primary-content": "#0b0b0b",
-          secondary: "#7dd3fc",
-          accent: "#f472b6",
-          neutral: "#111827",
-          "base-100": "#ffffff",
-        },
-      },
-      "light",
-      "dark",
-    ],
-    darkTheme: "dark",
-  },
+  plugins: [],
 };
