@@ -575,7 +575,6 @@ function AppContent({ children }: { children: React.ReactNode }) {
             <MiniAppTopNavbar 
               isConnected={effectiveIsConnected}
               onLogoClick={() => {}} 
-              onTutorialClick={handleTutorialClick}
             />
           )}
           <main className={`px-4 ${isHomePage ? "pt-16 pb-20" : "pb-20"}`}>{children}</main>
@@ -593,7 +592,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
       ) : (
         <>
           <Navbar />
-          <main className="px-4">{children}</main>
+          <main className="px-4 pt-16">{children}</main>
           <Footer />
         </>
       )}

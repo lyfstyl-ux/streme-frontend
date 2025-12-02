@@ -9,13 +9,11 @@ import { memo, useCallback, useEffect, useState } from "react";
 interface MiniAppTopNavbarProps {
   isConnected: boolean;
   onLogoClick?: () => void;
-  onTutorialClick: () => void;
 }
 
 function MiniAppTopNavbarComponent({
   isConnected,
   onLogoClick,
-  onTutorialClick,
 }: MiniAppTopNavbarProps) {
   const postHog = usePostHog();
   const [isDark, setIsDark] = useState(false);
@@ -61,14 +59,7 @@ function MiniAppTopNavbarComponent({
     };
   }, []);
 
-  // Memoize the tutorial button click handler to prevent unnecessary re-renders
-  const handleTutorialClick = useCallback(() => {
-    onTutorialClick();
-    postHog?.capture("tutorial_opened", {
-      context: "farcaster_mini_app",
-      opened_by: "help_button",
-    });
-  }, [onTutorialClick, postHog]);
+  // No tutorial icon in mini-app navbar per request
 
   return (
     <div className="fixed top-0 left-0 right-0 flex items-center justify-between py-4 px-8 z-40 bg-base-100/80 backdrop-blur-sm">
@@ -99,28 +90,7 @@ function MiniAppTopNavbarComponent({
               )}
         </Link>
       </div>
-      <div className="flex items-center gap-2">
-        <button
-          onClick={handleTutorialClick}
-          className="btn btn-ghost btn-circle btn-sm flex-shrink-0"
-          title="Tutorial"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </button>
-      </div>
+      <div />
     </div>
   );
 }
@@ -132,8 +102,7 @@ const arePropsEqual = (
 ) => {
   return (
     prevProps.isConnected === nextProps.isConnected &&
-    prevProps.onLogoClick === nextProps.onLogoClick &&
-    prevProps.onTutorialClick === nextProps.onTutorialClick
+    prevProps.onLogoClick === nextProps.onLogoClick
   );
 };
 

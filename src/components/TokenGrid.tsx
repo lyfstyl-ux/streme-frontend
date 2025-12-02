@@ -445,7 +445,7 @@ export const TrendingTokensCarousel = ({
       <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 [&::-webkit-scrollbar]:hidden"
+          className="flex gap-1 overflow-x-auto scrollbar-hide pb-2 [&::-webkit-scrollbar]:hidden"
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",

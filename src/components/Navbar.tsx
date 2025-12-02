@@ -8,8 +8,45 @@ import { MiniAppTutorialModal } from "./MiniAppTutorialModal";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { HowItWorksModal } from "./HowItWorksModal";
 import { SearchBar } from "./SearchBar";
+import { Logo } from "./Logo";
 import { useWallet } from "../hooks/useWallet";
 import { HeaderRewards } from "./HeaderRewards";
+ 
+function LogoFallback({
+  src,
+  heightClass,
+  onClick,
+}: {
+  src: string;
+  heightClass: string;
+  onClick?: () => void;
+}) {
+  const [errored, setErrored] = useState(false);
+
+  if (errored) {
+    return (
+      <div className={`relative ${heightClass} w-28 md:w-36`}>
+        <div className="cursor-pointer" onClick={onClick}>
+          <Logo onClick={onClick} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${heightClass} w-28 md:w-36`}>
+      <Image
+        src={src}
+        alt="youBuidl"
+        fill
+        className="object-contain cursor-pointer"
+        onClick={onClick}
+        onError={() => setErrored(true)}
+        priority
+      />
+    </div>
+  );
+}
 
 export function Navbar() {
   // Use new simplified wallet hook
@@ -104,39 +141,28 @@ export function Navbar() {
             {/* Logo (responsive) */}
             <Link href="/" className="flex-shrink-0">
               {isDark ? (
-                <div className="relative w-auto h-4 md:h-5">
-                  <Image
-                    src="/streme-text-white.svg"
-                    alt="youBuidl"
-                    fill
-                    className="object-contain cursor-pointer"
-                    onClick={handleLogoClick}
-                    priority
-                  />
-                </div>
+                <LogoFallback
+                  src="/streme-text-white.svg"
+                  heightClass="h-4 md:h-5"
+                  onClick={handleLogoClick}
+                />
               ) : (
-                <div className="relative w-auto h-5 md:h-6">
-                  <Image
-                    src="/streme-text-black.svg"
-                    alt="youBuidl"
-                    fill
-                    className="object-contain cursor-pointer"
-                    onClick={handleLogoClick}
-                    priority
-                  />
-                </div>
+                <LogoFallback
+                  src="/streme-text-black.svg"
+                  heightClass="h-5 md:h-6"
+                  onClick={handleLogoClick}
+                />
               )}
             </Link>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8 flex-1 ml-12">
-              <Link href="/launch" className="btn btn-primary btn-sm">
-                Launch a Token
-              </Link>
-              
               <div className="flex-1 max-w-md">
                 <SearchBar value={searchValue} onChange={setSearchValue} />
               </div>
+              <Link href="/launch" className="btn btn-primary btn-sm">
+                Launch a Token
+              </Link>
               <div className="ml-4">
                 <HeaderRewards />
               </div>
@@ -144,25 +170,6 @@ export function Navbar() {
 
             {/* Right side - Theme, Tutorial, Connect/Account */}
             <div className="hidden md:flex items-center gap-4">
-              <button
-                onClick={() => setIsTutorialOpen(true)}
-                className="btn btn-ghost btn-circle btn-sm"
-                title="Tutorial"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </button>
 
               <ThemeSwitcher />
 
@@ -223,25 +230,6 @@ export function Navbar() {
             {/* Mobile Menu Toggle */}
             <div className="md:hidden flex items-center gap-2">
               <button
-                onClick={() => setIsTutorialOpen(true)}
-                className="btn btn-ghost btn-sm btn-circle"
-                title="Tutorial"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </button>
-              <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="btn btn-ghost btn-sm"
                 aria-label="Toggle menu"
@@ -272,15 +260,15 @@ export function Navbar() {
           {isMenuOpen && (
             <div className="md:hidden border-t border-base-300/20 bg-base-100/95 backdrop-blur-sm">
               <div className="px-2 py-4 space-y-2">
+                <div className="px-2 py-2">
+                  <SearchBar value={searchValue} onChange={setSearchValue} />
+                </div>
                 <Link
                   href="/launch"
                   className="btn btn-primary w-full justify-start"
                 >
                   Launch a Token
                 </Link>
-                <div className="px-2 py-2">
-                  <SearchBar value={searchValue} onChange={setSearchValue} />
-                </div>
                 {isConnected && (
                   <Link
                     href="/tokens"

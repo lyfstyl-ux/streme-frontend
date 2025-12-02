@@ -11,10 +11,10 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
       <div className="relative">
         <input
           type="text"
-          placeholder="Token/User"
+          placeholder="public goods..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="input input-bordered w-full pr-10 text-base
+          className="input input-bordered rounded-full w-full pr-10 text-base
             focus:input-primary transition-all duration-200
             placeholder:text-base-content/50"
         />

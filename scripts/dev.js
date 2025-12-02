@@ -220,11 +220,27 @@ After installation, run this command again.
   // Spawn Next using the Node executable to avoid wrapper scripts detaching
   // and ensure the child process remains attached to this script.
   nextDev = spawn("node", [nextBin, "dev"], {
-    stdio: "inherit",
+    stdio: ["inherit", "inherit", "pipe"], // Pipe stderr to capture logs
     env: { ...process.env, NEXT_PUBLIC_URL: frameUrl, NEXTAUTH_URL: frameUrl },
     cwd: projectRoot,
     shell: false,
   });
+
+  // Capture stderr output in a rolling buffer for diagnostics
+  let stderrBuffer = [];
+  const MAX_STDERR_LINES = 50;
+  if (nextDev.stderr) {
+    nextDev.stderr.on("data", (data) => {
+      const lines = data.toString().split("\n");
+      stderrBuffer.push(...lines);
+      // Keep only the last N lines
+      if (stderrBuffer.length > MAX_STDERR_LINES) {
+        stderrBuffer = stderrBuffer.slice(-MAX_STDERR_LINES);
+      }
+      // Also print to console in real-time
+      process.stderr.write(data);
+    });
+  }
 
   // Log child process information for diagnostics
   try {
@@ -234,12 +250,28 @@ After installation, run this command again.
     // best-effort logging
   }
 
-  // If the Next.js child process exits for any reason, run cleanup
+  // If the Next.js child process exits for any reason, handle it
   nextDev.on("exit", (code, signal) => {
     if (!isCleaningUp) {
       console.log(new Date().toISOString(), `Next dev exited with code=${code} signal=${signal}`);
       console.log(`Child pid=${nextDev.pid} cwd=${process.cwd()}`);
       console.log(`Environment sample: NEXT_PUBLIC_URL=${process.env.NEXT_PUBLIC_URL}, NEXTAUTH_URL=${process.env.NEXTAUTH_URL}`);
+      
+      // If clean exit (code=0) without signal, auto-restart instead of shutdown
+      if (code === 0 && !signal) {
+        console.log("📋 Clean exit detected (code=0). Auto-restarting Next dev...\n");
+        // Small delay before restart to avoid rapid loops
+        setTimeout(() => startDev(), 1000);
+        return;
+      }
+      
+      // For errors or signals, print last stderr lines and cleanup
+      if (stderrBuffer.length > 0) {
+        console.log("\n=== Last stderr lines from Next dev ===");
+        console.log(stderrBuffer.join("\n"));
+        console.log("=== End stderr ===\n");
+      }
+      
       console.log("Suggestion: run 'node node_modules/.bin/next dev' directly to see raw Next logs.");
       cleanup();
     }

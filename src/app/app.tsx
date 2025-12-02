@@ -6,7 +6,6 @@ import {
   fetchTrendingTokens,
 } from "../components/TokenGrid";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Hero } from "../components/Hero";
 import { Token, TokensResponse } from "./types/token";
 import { SortOption } from "../components/TokenGrid";
 import { SearchBar } from "../components/SearchBar";
@@ -558,10 +557,8 @@ function App() {
   return (
     <>
       <div className="font-[family-name:var(--font-geist-sans)]">
-        <div className="flex flex-col row-start-2 w-full items-center">
-          <div className="block w-full">
-            <Hero />
-          </div>
+        <div className="flex flex-col row-start-2 w-full items-center mt-6">
+          {/* Hero removed */}
 
           {/* Trending Carousel - Above filters */}
           <div className="w-full max-w-[1200px] px-4 mx-auto">
@@ -577,7 +574,7 @@ function App() {
             <h3 className="font-semibold text-base-content mb-2">
               All Streme Tokens
             </h3>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 my-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 my-3">
               <div className="flex-none">
                 <SortButtons
                   sortBy={sortBy}
@@ -585,7 +582,8 @@ function App() {
                   isMiniView={false}
                 />
               </div>
-              <div className="flex-1">
+              {/* Reduce search bar width to avoid overly long input */}
+              <div className="flex-1 sm:max-w-xs md:max-w-sm">
                 <SearchBar
                   value={searchQuery}
                   onChange={(value) => setSearchQuery(value)}

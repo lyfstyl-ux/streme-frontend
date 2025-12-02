@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light">
+    <html lang="en" data-theme="youbuidl">
       <head>
         {/* Performance hint for Farcaster Quick Auth server, per docs */}
         <link rel="preconnect" href="https://auth.farcaster.xyz" />
